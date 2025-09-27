@@ -3,6 +3,7 @@ import { useTaskStore } from '../../../stores/useTask';
 import TaskImage from '../TaskImage/TaskImage';
 import type { Task } from '../../../types/task';
 import DeleteModal from '../DeleteModal/DeleteModal';
+import { Link } from 'react-router-dom';
 
 interface Taskprops {
   image_url: string;
@@ -58,8 +59,10 @@ export default function TaskCard({
 
   return (
     <>
+    <Link to={`/tasks/${id}`}>
+   
       <TaskImage src={image_url} alt={title} />
-
+ </Link>
       <div className="p-4">
         <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900 sm:text-lg md:text-xl lg:text-2xl">
           {title.split(' ').splice(0, 2).join(' ')}

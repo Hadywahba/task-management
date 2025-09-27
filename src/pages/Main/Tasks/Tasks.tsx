@@ -122,6 +122,7 @@ export default function Tasks() {
                   DeleteTask={DeleteTask}
                   seteditTask={seteditTask}
                   setmodal={setmodal}
+                  
                 />
               </div>
             ))}

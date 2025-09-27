@@ -29,3 +29,11 @@ export const updateTask = async (id: number , values: Partial<Task>) => {
   });
   return data;
 };
+
+
+export const getSingleTask=async(id: number)=>{
+   const { data } = await axiosInstance.get('/tasks', {
+    params: { id: `eq.${id}` },
+  });
+  return data;
+}
