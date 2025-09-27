@@ -14,3 +14,10 @@ export const addTask = async (values: taskFormFields) => {
   const { data } = await axiosInstance.post('/tasks', values);
   return data;
 };
+
+export const deleteTask = async (id: number) => {
+  const { data } = await axiosInstance.delete('/tasks', {
+    params: { id: `eq.${id}` },
+  });
+  return data;
+};

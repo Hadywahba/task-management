@@ -9,7 +9,7 @@ interface Taskprops {
   category_id: number;
   description: string;
   id:number;
-
+DeleteTask:(id:number)=>void;
 }
 
 export default function TaskCard({
@@ -18,9 +18,7 @@ export default function TaskCard({
   completed,
   category_id,
   description,
-
-  
-
+DeleteTask,
   id,
 }: Taskprops) {
     const setTaskId = useTaskStore((state) => state.setTaskId);
@@ -52,6 +50,7 @@ export default function TaskCard({
               <button
              
                 type="submit"
+                 onClick={()=>DeleteTask(id)}
                 className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
               >
                Delete

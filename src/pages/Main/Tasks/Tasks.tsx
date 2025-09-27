@@ -1,5 +1,5 @@
-import {  useQuery } from '@tanstack/react-query';
-import {  getTasks } from '../../../services/api/task';
+import {  useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {  deleteTask, getTasks } from '../../../services/api/task';
 import { useTaskStore } from '../../../stores/useTask';
 import { useEffect, useState } from 'react';
 import type { Task } from '../../../types/task';
@@ -15,7 +15,7 @@ export default function Tasks() {
   const offset = useTaskStore((state) => state.offset);
   const setOffset = useTaskStore((state) => state.setoffset);
   const selectedCategory = useTaskStore((state) => state.selectedCategory);
- 
+ const queryClient =useQueryClient()
   const { data: dataCategory } = useQuery({
     queryKey: ['Categories'],
     queryFn: () => getCategories({ params: { limit: 30, offset } }),
@@ -36,6 +36,15 @@ export default function Tasks() {
             : {}),
         },
       }),
+  });
+
+  const { mutate: DeleteTask } = useMutation({
+    mutationFn: (id: number) => deleteTask(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['getTasks', offset, selectedCategory],
+      });
+    },
   });
 
  
@@ -88,6 +97,7 @@ export default function Tasks() {
                   title={task.title}
                   description={task.description}
                   id={task.id}
+                  DeleteTask={DeleteTask}
                 />
               </div>
             ))}
