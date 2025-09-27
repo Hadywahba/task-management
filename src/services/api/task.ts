@@ -1,4 +1,5 @@
 import axiosInstance from '../../lib/axios';
+import type { Task } from '../../types/task';
 import type { taskFormFields } from '../validation/addTask';
 
 export const getTasks = async ({
@@ -17,6 +18,13 @@ export const addTask = async (values: taskFormFields) => {
 
 export const deleteTask = async (id: number) => {
   const { data } = await axiosInstance.delete('/tasks', {
+    params: { id: `eq.${id}` },
+  });
+  return data;
+};
+
+export const updateTask = async (id: number , values: Partial<Task>) => {
+  const { data } = await axiosInstance.patch('/tasks',values , {
     params: { id: `eq.${id}` },
   });
   return data;

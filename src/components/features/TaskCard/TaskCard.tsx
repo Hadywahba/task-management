@@ -1,6 +1,7 @@
-import { useEffect } from "react";
-import { useTaskStore } from "../../../stores/useTask";
-import TaskImage from "../TaskImage/TaskImage";
+import { useEffect } from 'react';
+import { useTaskStore } from '../../../stores/useTask';
+import TaskImage from '../TaskImage/TaskImage';
+import type { Task } from '../../../types/task';
 
 interface Taskprops {
   image_url: string;
@@ -8,8 +9,10 @@ interface Taskprops {
   completed: boolean;
   category_id: number;
   description: string;
-  id:number;
-DeleteTask:(id:number)=>void;
+  id: number;
+  DeleteTask: (id: number) => void;
+  seteditTask: React.Dispatch<React.SetStateAction<Pick<Task, 'id' | 'title' | 'category_id' |'description'> |null >>;
+  setmodal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function TaskCard({
@@ -18,16 +21,33 @@ export default function TaskCard({
   completed,
   category_id,
   description,
-DeleteTask,
+  DeleteTask,
   id,
+  seteditTask,
+  setmodal,
 }: Taskprops) {
-    const setTaskId = useTaskStore((state) => state.setTaskId);
-     useEffect(() => {
-    setTaskId(id)
+  const setTaskId = useTaskStore((state) => state.setTaskId);
+  useEffect(() => {
+    setTaskId(id);
   }, [id]);
+
+
+  //* handle edit
+
+const onEditTask =()=>{
+  seteditTask({
+    id,
+    category_id,
+    description,
+    title,
+  })
+  setmodal(true)
+}
+
+
   return (
     <>
-      <TaskImage src={image_url} alt={title}/>
+      <TaskImage src={image_url} alt={title} />
 
       <div className="p-4">
         <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900 sm:text-lg md:text-xl lg:text-2xl">
@@ -47,22 +67,18 @@ DeleteTask,
         Category: {category_id}
       </span>
       <div className="flex items-center justify-center gap-2">
-              <button
-             
-                type="submit"
-                 onClick={()=>DeleteTask(id)}
-                className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
-              >
-               Delete
-              </button>
-              <button
-              
-                className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
-              >
-                {' '}
-                update
-              </button>
-            </div>
+        <button
+          type="submit"
+          onClick={() => DeleteTask(id)}
+          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+        >
+          Delete
+        </button>
+        <button onClick={onEditTask} className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50">
+          {' '}
+          update
+        </button>
+      </div>
     </>
   );
 }

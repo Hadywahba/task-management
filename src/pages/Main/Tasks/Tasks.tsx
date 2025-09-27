@@ -1,5 +1,10 @@
-import {  useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {  deleteTask, getTasks } from '../../../services/api/task';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  addTask,
+  deleteTask,
+  getTasks,
+  updateTask,
+} from '../../../services/api/task';
 import { useTaskStore } from '../../../stores/useTask';
 import { useEffect, useState } from 'react';
 import type { Task } from '../../../types/task';
@@ -15,7 +20,11 @@ export default function Tasks() {
   const offset = useTaskStore((state) => state.offset);
   const setOffset = useTaskStore((state) => state.setoffset);
   const selectedCategory = useTaskStore((state) => state.selectedCategory);
- const queryClient =useQueryClient()
+  const [editTask, seteditTask] = useState<Pick<
+    Task,
+    'id' | 'title' | 'category_id' | 'description'
+  > | null>(null);
+  const queryClient = useQueryClient();
   const { data: dataCategory } = useQuery({
     queryKey: ['Categories'],
     queryFn: () => getCategories({ params: { limit: 30, offset } }),
@@ -38,6 +47,10 @@ export default function Tasks() {
       }),
   });
 
+  const { mutate: AddTask } = useMutation({
+    mutationFn: addTask,
+  });
+
   const { mutate: DeleteTask } = useMutation({
     mutationFn: (id: number) => deleteTask(id),
     onSuccess: () => {
@@ -47,7 +60,15 @@ export default function Tasks() {
     },
   });
 
- 
+  const { mutate: updateTasks } = useMutation({
+    mutationFn: ({ id, values }: { id: number; values: Partial<Task> }) =>
+      updateTask(id, values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['getTasks', offset, selectedCategory],
+      });
+    },
+  });
 
   useEffect(() => {
     console.log(data);
@@ -64,6 +85,7 @@ export default function Tasks() {
   //& Exit Modal
   const exitModal = () => {
     setmodal(false);
+    seteditTask(null);
   };
 
   return (
@@ -98,6 +120,8 @@ export default function Tasks() {
                   description={task.description}
                   id={task.id}
                   DeleteTask={DeleteTask}
+                  seteditTask={seteditTask}
+                  setmodal={setmodal}
                 />
               </div>
             ))}
@@ -121,7 +145,16 @@ export default function Tasks() {
         </button>
       </section>
 
-      {modal && <Modal exitModal={exitModal} setmodal={setmodal} />}
+      {modal && (
+        <Modal
+          exitModal={exitModal}
+          setmodal={setmodal}
+          task={editTask || undefined}
+          taskId={editTask?.id}
+          AddTask={AddTask}
+          UpdateTask={updateTasks}
+        />
+      )}
     </main>
   );
 }
