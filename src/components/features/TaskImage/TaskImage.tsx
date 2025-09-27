@@ -14,7 +14,7 @@ export default function TaskImage({ src, alt , className }: TaskImageProps) {
   const [error, setError] = useState(false);
 
   return (
-    <div className={`flex h-60 w-full items-center justify-center overflow-hidden rounded-t-lg ${className}` }>
+    <div className={`flex h-50 w-full items-center justify-center overflow-hidden rounded-t-lg ${className}` }>
       {loading && !error && (
         <div className="flex h-full w-full items-center justify-center bg-gray-300">
           <Spinner />
