@@ -17,7 +17,7 @@ export default function TaskDetails() {
   const selectedCategory = useTaskStore((state) => state.selectedCategory);
   const [Completed, setCompleted] = useState<boolean>(false);
   const { data, isLoading, isError, error, isPending } = useQuery({
-    queryKey: ['singleTask',id],
+    queryKey: ['singleTask', id],
     queryFn: () => getSingleTask(Number(id)),
   });
   const { mutate: updateTasks } = useMutation({
@@ -32,10 +32,6 @@ export default function TaskDetails() {
       });
     },
   });
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   useEffect(() => {
     if (data) {

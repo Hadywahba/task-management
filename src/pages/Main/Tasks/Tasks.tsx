@@ -70,10 +70,6 @@ export default function Tasks() {
     },
   });
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   //todo Next button
   const nextButton = () => {
     setOffset(offset + 20);
