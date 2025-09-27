@@ -37,6 +37,8 @@ Tech Stack:-
 4-React Query
 5-Zustand
 6-axios
+7-React Hook Form
+8-Zod
 
 Component Architecture :-
 1-components/feature : Reusable UI components ( Modals , TaskCard , CategoryCard , DeleteModal , TaskImage )
