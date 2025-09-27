@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTaskStore } from '../../../stores/useTask';
 import TaskImage from '../TaskImage/TaskImage';
 import type { Task } from '../../../types/task';
+import DeleteModal from '../DeleteModal/DeleteModal';
 
 interface Taskprops {
   image_url: string;
@@ -11,7 +12,12 @@ interface Taskprops {
   description: string;
   id: number;
   DeleteTask: (id: number) => void;
-  seteditTask: React.Dispatch<React.SetStateAction<Pick<Task, 'id' | 'title' | 'category_id' |'description'> |null >>;
+  seteditTask: React.Dispatch<
+    React.SetStateAction<Pick<
+      Task,
+      'id' | 'title' | 'category_id' | 'description'
+    > | null>
+  >;
   setmodal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -21,29 +27,34 @@ export default function TaskCard({
   completed,
   category_id,
   description,
-  DeleteTask,
   id,
   seteditTask,
   setmodal,
+  DeleteTask,
 }: Taskprops) {
+  const [deletemodal, setdeletemodal] = useState<boolean>(false);
   const setTaskId = useTaskStore((state) => state.setTaskId);
   useEffect(() => {
     setTaskId(id);
   }, [id]);
 
-
   //* handle edit
 
-const onEditTask =()=>{
-  seteditTask({
-    id,
-    category_id,
-    description,
-    title,
-  })
-  setmodal(true)
-}
+  const onEditTask = () => {
+    seteditTask({
+      id,
+      category_id,
+      description,
+      title,
+    });
+    setmodal(true);
+  };
 
+  //todo handle delete modal
+
+  const deleteModal = () => {
+    setdeletemodal(true);
+  };
 
   return (
     <>
@@ -69,16 +80,26 @@ const onEditTask =()=>{
       <div className="flex items-center justify-center gap-2">
         <button
           type="submit"
-          onClick={() => DeleteTask(id)}
+          onClick={deleteModal}
           className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
         >
           Delete
         </button>
-        <button onClick={onEditTask} className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50">
+        <button
+          onClick={onEditTask}
+          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+        >
           {' '}
           update
         </button>
       </div>
+      {deletemodal && (
+        <DeleteModal
+          setdeletemodal={setdeletemodal}
+          DeleteTask={DeleteTask}
+          taskID={id}
+        />
+      )}
     </>
   );
 }
