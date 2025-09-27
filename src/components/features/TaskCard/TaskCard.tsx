@@ -1,9 +1,15 @@
+import { useEffect } from "react";
+import { useTaskStore } from "../../../stores/useTask";
+import TaskImage from "../TaskImage/TaskImage";
+
 interface Taskprops {
   image_url: string;
   title: string;
   completed: boolean;
   category_id: number;
   description: string;
+  id:number;
+
 }
 
 export default function TaskCard({
@@ -12,10 +18,18 @@ export default function TaskCard({
   completed,
   category_id,
   description,
+
+  
+
+  id,
 }: Taskprops) {
+    const setTaskId = useTaskStore((state) => state.setTaskId);
+     useEffect(() => {
+    setTaskId(id)
+  }, [id]);
   return (
     <>
-      <img className="rounded-t-lg" src={image_url} />
+      <TaskImage src={image_url} alt={title}/>
 
       <div className="p-4">
         <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900 sm:text-lg md:text-xl lg:text-2xl">
@@ -34,6 +48,22 @@ export default function TaskCard({
       <span className="absolute top-2 right-2 me-2 rounded-sm bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-800">
         Category: {category_id}
       </span>
+      <div className="flex items-center justify-center gap-2">
+              <button
+             
+                type="submit"
+                className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+              >
+               Delete
+              </button>
+              <button
+              
+                className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+              >
+                {' '}
+                update
+              </button>
+            </div>
     </>
   );
 }
