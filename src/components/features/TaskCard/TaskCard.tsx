@@ -69,9 +69,9 @@ export default function TaskCard({
           {title.split(' ').splice(0, 2).join(' ')}
         </h5>
 
-        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+        <p className="mb-3 font-normal text-gray-700 dark:text-gray-400 text-base">
           {description
-            ? description.split(' ').splice(0, 4).join(' ')
+            ? description.split(' ').splice(0, 3).join(' ')
             : 'No description available'}
         </p>
 
@@ -94,13 +94,13 @@ export default function TaskCard({
         <button
           type="submit"
           onClick={deleteModal}
-          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-8 py-3 font-bold text-white transition-colors disabled:opacity-50"
         >
           Delete
         </button>
         <button
           onClick={onEditTask}
-          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
+          className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-8 py-3 font-bold text-white transition-colors disabled:opacity-50"
         >
           {' '}
           update

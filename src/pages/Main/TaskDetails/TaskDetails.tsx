@@ -71,7 +71,7 @@ export default function TaskDetails() {
               <TaskImage
                 alt={data[0]?.title}
                 src={data[0]?.image_url}
-                className={''}
+                className={'h-80'}
               />
             </section>
             <section className="col-span-5 container mx-auto space-y-8 md:w-[50%] lg:w-full">
