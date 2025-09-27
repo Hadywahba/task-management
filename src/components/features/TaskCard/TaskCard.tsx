@@ -12,6 +12,7 @@ interface Taskprops {
   category_id: number;
   description: string;
   id: number;
+  priority: string;
   DeleteTask: (id: number) => void;
   seteditTask: React.Dispatch<
     React.SetStateAction<Pick<
@@ -29,6 +30,7 @@ export default function TaskCard({
   category_id,
   description,
   id,
+  priority,
   seteditTask,
   setmodal,
   DeleteTask,
@@ -59,24 +61,32 @@ export default function TaskCard({
 
   return (
     <>
-    <Link to={`/tasks/${id}`}>
-   
-      <TaskImage src={image_url} alt={title} />
- </Link>
-      <div className="p-4">
-        <h5 className="mb-2 text-base font-bold tracking-tight text-gray-900 sm:text-lg md:text-xl lg:text-2xl">
+      <Link to={`/tasks/${id}`}>
+        <TaskImage src={image_url} alt={title} />
+      </Link>
+      <div className="p-4 mb-4">
+        <h5 className="mb-3 text-base font-bold tracking-tight text-gray-900 sm:text-lg md:text-xl lg:text-2xl">
           {title.split(' ').splice(0, 2).join(' ')}
         </h5>
 
         <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-          {description ? description.split(' ').splice(0, 4).join(' ') : "No description available"}
+          {description
+            ? description.split(' ').splice(0, 4).join(' ')
+            : 'No description available'}
         </p>
+
+        <span
+          className={`${priority == 'high' ? 'bg-red-600 text-white' : priority == 'medium' ? 'bg-amber-400 text-black' : priority == 'low' ? 'bg-blue-400 text-white' : ''} rounded-sm px-2.5 py-2  text-sm font-medium`}
+        >
+          priority : {priority}
+        </span>
       </div>
       <span
         className={` ${completed ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'} absolute top-2 left-2 me-2 rounded-sm px-2.5 py-1 text-sm font-medium`}
       >
         {completed ? 'completed' : 'pending'}
       </span>
+
       <span className="absolute top-2 right-2 me-2 rounded-sm bg-blue-100 px-2.5 py-1 text-sm font-medium text-blue-800">
         Category: {category_id}
       </span>
