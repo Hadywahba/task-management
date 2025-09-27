@@ -89,7 +89,7 @@ export default function Tasks() {
       <section>
         <CategoryCard dataCategory={dataCategory} />
       </section>
-      <section className="my-14 border-t-2 border-b-gray-600">
+      <section className="my-14 border-t-2 border-b-gray-600 px-4">
         <div className="container mx-auto mt-8">
           <button
             onClick={() => setmodal(true)}
