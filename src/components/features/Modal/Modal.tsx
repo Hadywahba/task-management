@@ -6,6 +6,8 @@ import {
 } from '../../../services/validation/addTask';
 import TextInput from '../../ui/Form/TextInput';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { ClipLoader } from "react-spinners";
 interface ModalProps {
   exitModal: () => void;
   setmodal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -23,6 +25,8 @@ export default function Modal({
   AddTask,
   taskId,
 }: ModalProps) {
+  const [loading, setloading] = useState<boolean>(false);
+
   const {
     register,
     handleSubmit,
@@ -39,13 +43,19 @@ export default function Modal({
   });
 
   const submitTask: SubmitHandler<taskFormFields> = (data) => {
-    if (task && UpdateTask && taskId) {
-      UpdateTask({ id: taskId, values: data });
-    } else if (AddTask) {
-      AddTask(data);
-    }
-    setmodal(false);
-    reset();
+    setloading(true);
+    setTimeout(() => {
+      if (task && UpdateTask && taskId) {
+        UpdateTask({ id: taskId, values: data });
+        setloading(true);
+      } else if (AddTask) {
+        AddTask(data);
+        setloading(true);
+      }
+      setmodal(false);
+      setloading(false);
+      reset();
+    }, 2000);
   };
 
   return (
@@ -89,7 +99,13 @@ export default function Modal({
                 type="submit"
                 className="bg-secondary hover:bg-primary mx-auto mb-4 flex w-max cursor-pointer items-center justify-center rounded-lg px-12 py-3 font-bold text-white transition-colors disabled:opacity-50"
               >
-                {task ? 'Edit' : 'Add'}
+                {loading ? (
+                  <ClipLoader color="#ebe7e7" size={19} />
+                ) : task ? (
+                  'Edit'
+                ) : (
+                  'Add'
+                )}
               </button>
               <button
                 onClick={exitModal}
